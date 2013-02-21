@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+#
+# benchmike
+# Copyright (C) 2013  Honza Pokorny
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import sys
+import subprocess
+from optparse import OptionParser
+from contextlib import contextmanager
+import time
+
+
+__version__ = '0.0.1'
+
+
+times = []
+
+
+@contextmanager
+def timer():
+    start = time.time()
+    try:
+        yield
+    finally:
+        ms = (time.time() - start) * 1000
+        times.append(ms)
+
+
+def local(command, capture=False, shell=None):
+    out_stream = subprocess.PIPE
+    err_stream = subprocess.PIPE
+    p = subprocess.Popen(command, shell=True, stdout=out_stream,
+                         stderr=err_stream)
+    return p.communicate()
+
+
+def get_percentile_rank(scores, your_score):
+    count = 0
+
+    for score in scores:
+        if score <= your_score:
+            count += 1
+
+    percentile_rank = 100.0 * count / len(scores)
+
+    return percentile_rank
+
+
+def percentile(scores, percentile_rank):
+    scores.sort()
+    for score in scores:
+        if get_percentile_rank(scores, score) >= percentile_rank:
+            return score
+
+
+def run(command, iterations):
+    for x in range(0, iterations):
+        with timer():
+            local(command)
+
+    print 'Iterations:      %s' % iterations
+    print '95th percentile: %s' % (percentile(times, 95))
+    print '99th percentile: %s' % (percentile(times, 99))
+    print 'min:             %s' % min(times)
+    print 'max:             %s' % max(times)
+
+
+def main():
+    usage = "Usage: benchmike [options] COMMAND"
+    parser = OptionParser(usage=usage, version='benchmike %s' % __version__)
+
+    parser.add_option('-i', '--iterations', action='store', type='int',
+                      default=10,
+                      help='How many times should the command run?')
+
+    options, args = parser.parse_args()
+
+    if len(args) < 1:
+        sys.stderr.write('Missing command\n')
+        sys.exit(1)
+
+    run(args[0], options.iterations)
+
+
+if __name__ == '__main__':
+    main()
