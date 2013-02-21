@@ -21,6 +21,16 @@ Usage
       -i ITERATIONS, --iterations=ITERATIONS
                             How many times should the command run?
 
+Example
+-------
+
+    $ ./benchmike -i 100 "date"
+    Iterations:      100
+    95th percentile: 6.99806213379
+    99th percentile: 7.36784934998
+    min:             5.24401664734
+    max:             7.38000869751
+
 License
 -------
 
