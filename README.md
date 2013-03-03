@@ -8,10 +8,13 @@ in milliseconds.  benchmike is implement in [Go][1].
 **Note**: Prior to `0.2.0`, benchmike was a Python utility.  Please see the git
 history for details.
 
-Install
--------
+Building and install
+--------------------
 
-Download the `benchmike` file, make it executable and put it on your `$PATH`.
+    $ git clone git://github.com/honza/benchmike.git
+    $ cd benchmike
+    $ make
+    $ ./bin/benchmike -i 500 "date"
 
 Usage
 -----
