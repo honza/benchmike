@@ -3,7 +3,10 @@ benchmike
 
 benchmike is a command line benchmarking tool.  It runs your code a specified
 number of iterations and gives you back the min, max, 95th and 99th percentile
-in milliseconds.
+in milliseconds.  benchmike is implement in [Go][1].
+
+**Note**: Prior to `0.2.0`, benchmike was a Python utility.  Please see the git
+history for details.
 
 Install
 -------
@@ -35,3 +38,5 @@ License
 -------
 
 GPLv3
+
+[1]: http://golang.org/
