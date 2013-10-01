@@ -75,6 +75,10 @@ func main() {
 
     results := make([]float64, *iterations)
 
+    if (len(flag.Args()) < 1) {
+        usage()
+    }
+
     cmd := parseCommand(flag.Args()[0])
 
     for i := 0; i < *iterations; i++ {
