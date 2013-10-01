@@ -56,7 +56,7 @@ func run(cmd exec.Cmd, verbose bool) time.Duration {
 }
 
 func usage() {
-    fmt.Fprintf(os.Stderr, "usage: benchmike \n")
+    fmt.Fprintf(os.Stderr, "usage: benchmike OPTIONS COMMAND\n")
     flag.PrintDefaults()
     os.Exit(2)
 }
